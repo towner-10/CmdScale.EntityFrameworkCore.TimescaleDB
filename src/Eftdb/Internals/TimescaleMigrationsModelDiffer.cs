@@ -1,4 +1,5 @@
 ﻿using CmdScale.EntityFrameworkCore.TimescaleDB.Internals.Features;
+using CmdScale.EntityFrameworkCore.TimescaleDB.Internals.Features.CompressionPolicies;
 using CmdScale.EntityFrameworkCore.TimescaleDB.Internals.Features.ContinuousAggregates;
 using CmdScale.EntityFrameworkCore.TimescaleDB.Internals.Features.Hypertables;
 using CmdScale.EntityFrameworkCore.TimescaleDB.Internals.Features.ReorderPolicies;
@@ -24,6 +25,7 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Internals
                 new HypertableDiffer(),
                 new ReorderPolicyDiffer(),
                 new ContinuousAggregateDiffer(),
+                new CompressionPolicyDiffer()
             ];
 
         public override IReadOnlyList<MigrationOperation> GetDifferences(IRelationalModel? source, IRelationalModel? target)
@@ -57,11 +59,16 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Internals
                 case DropReorderPolicyOperation:
                     return 20;
 
-                case CreateContinuousAggregateOperation:
+                case AddCompressionPolicyOperation:
+                case AlterCompressionPolicyOperation:
+                case DropCompressionPolicyOperation:
                     return 30;
+
+                case CreateContinuousAggregateOperation:
+                    return 40;
                 case AlterContinuousAggregateOperation:
                 case DropContinuousAggregateOperation:
-                    return 40;
+                    return 50;
 
                 // Standard EF Core operations (CreateTable, etc.)
                 default:

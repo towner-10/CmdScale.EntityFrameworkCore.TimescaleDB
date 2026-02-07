@@ -19,6 +19,7 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB
             List<string> statements;
             HypertableOperationGenerator? hypertableOperationGenerator = null;
             ReorderPolicyOperationGenerator? reorderPolicyOperationGenerator = null;
+            CompressionPolicyOperationGenerator? compressionPolicyOperationGenerator = null;
             ContinuousAggregateOperationGenerator? continuousAggregateOperationGenerator = null;
             bool suppressTransaction = false;
 
@@ -63,6 +64,21 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB
                 case DropContinuousAggregateOperation dropContinuousAggregateOperation:
                     continuousAggregateOperationGenerator ??= new(isDesignTime: false);
                     statements = continuousAggregateOperationGenerator.Generate(dropContinuousAggregateOperation);
+                    break;
+
+                case AddCompressionPolicyOperation addCompressionPolicyOperation:
+                    compressionPolicyOperationGenerator ??= new(isDesignTime: false);
+                    statements = compressionPolicyOperationGenerator.Generate(addCompressionPolicyOperation);
+                    break;
+
+                case AlterCompressionPolicyOperation alterCompressionPolicyOperation:
+                    compressionPolicyOperationGenerator ??= new(isDesignTime: false);
+                    statements = compressionPolicyOperationGenerator.Generate(alterCompressionPolicyOperation);
+                    break;
+
+                case DropCompressionPolicyOperation dropCompressionPolicyOperation:
+                    compressionPolicyOperationGenerator ??= new(isDesignTime: false);
+                    statements = compressionPolicyOperationGenerator.Generate(dropCompressionPolicyOperation);
                     break;
 
                 default:

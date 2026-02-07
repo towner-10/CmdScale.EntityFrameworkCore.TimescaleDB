@@ -15,6 +15,7 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Design
 
             HypertableOperationGenerator? hypertableOperationGenerator = null;
             ReorderPolicyOperationGenerator? reorderPolicyOperationGenerator = null;
+            CompressionPolicyOperationGenerator? compressionPolicyOperationGenerator = null;
             ContinuousAggregateOperationGenerator? continuousAggregateOperationGenerator = null;
 
             List<string> statements;
@@ -42,6 +43,19 @@ namespace CmdScale.EntityFrameworkCore.TimescaleDB.Design
                 case DropReorderPolicyOperation dropReorder:
                     reorderPolicyOperationGenerator ??= new(isDesignTime: true);
                     statements = reorderPolicyOperationGenerator.Generate(dropReorder);
+                    break;
+
+                case AddCompressionPolicyOperation addCompression:
+                    compressionPolicyOperationGenerator ??= new(isDesignTime: true);
+                    statements = compressionPolicyOperationGenerator.Generate(addCompression);
+                    break;
+                case AlterCompressionPolicyOperation alterCompression:
+                    compressionPolicyOperationGenerator ??= new(isDesignTime: true);
+                    statements = compressionPolicyOperationGenerator.Generate(alterCompression);
+                    break;
+                case DropCompressionPolicyOperation dropCompression:
+                    compressionPolicyOperationGenerator ??= new(isDesignTime: true);
+                    statements = compressionPolicyOperationGenerator.Generate(dropCompression);
                     break;
 
                 case CreateContinuousAggregateOperation createContinuousAggregate:
